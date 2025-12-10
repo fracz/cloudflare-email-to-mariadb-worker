@@ -38,8 +38,8 @@ export default {
 
 		try {
 			await connection.execute(
-				'INSERT INTO gcfound_email (subject, content) VALUES(?,?)',
-				[email.subject, body]
+				'INSERT INTO gcfound_email (subject, content, html) VALUES(?,?,?)',
+				[email.subject, body, email.html]
 			);
 
 			ctx.waitUntil(connection.end());
