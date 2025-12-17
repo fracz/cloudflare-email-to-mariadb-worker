@@ -20,12 +20,7 @@ export default {
 			attachmentEncoding: "base64",
 		});
 
-		console.log({
-			text: email.text,
-			html: email.html
-		});
-
-		let body = parseContent(email.text, email.html);
+		let body = parseContent(email.text, email.html) || 'NO BODY';
 
 		const connection = await createConnection({
 			host: 'mws02.mikr.us',
@@ -38,8 +33,8 @@ export default {
 
 		try {
 			await connection.execute(
-				'INSERT INTO gcfound_email (subject, content, html) VALUES(?,?,?)',
-				[email.subject, body, email.html]
+				'INSERT INTO gcfound_email (email, subject, content, html) VALUES(?,?,?,?)',
+				[message.to, email.subject || 'NO SUBJECT', body, email.html || null]
 			);
 
 			ctx.waitUntil(connection.end());
